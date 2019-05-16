@@ -1,0 +1,23 @@
+version: 2.1
+
+executors:
+  docker-executor:
+    docker:
+      - image: docker:18
+
+workflows:
+  build:
+    jobs:
+      - build-oci-image
+
+jobs:
+  build-oci-image:
+    executor: docker-executor
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t test .
